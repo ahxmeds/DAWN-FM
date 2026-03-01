@@ -74,7 +74,6 @@ DAWN-FM/
 ```
 
 **Note**: To use a different data directory, specify `--data_dir /your/custom/path` when running scripts.
-```
 
 ## Project Structure
 
