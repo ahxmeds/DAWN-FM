@@ -1,10 +1,8 @@
 # DAWN-FM: Data-Aware and Noise-Informed Flow Matching for Solving Inverse Problems
 
-Official implementation of the deblurring and tomography experiments from the paper:
+This repository contains the official implementation for the paper:
 
-**"Data-Aware and Noise-Informed Flow Matching for Solving Inverse Problems"**  
-Published in: Foundations of Data Science  
-DOI: [10.3934/fods.2026005](https://www.aimsciences.org//article/doi/10.3934/fods.2026005)
+> S. Ahamed, E. Haber, _DAWN-FM: Data-Aware and Noise-Informed Flow Matching for Solving Inverse Problems_, Foundations of Data Science (AIMS), Jan 2026, doi: [10.3934/fods.2026005](https://www.aimsciences.org//article/doi/10.3934/fods.2026005).
 
 ## Overview
 
@@ -15,6 +13,15 @@ This repository provides clean, consolidated implementations of:
 Both methods are applied to two inverse problems:
 1. **Image Deblurring**: on MNIST, CIFAR10, and STL10 datasets
 2. **Tomography Reconstruction**: on OrganCMNIST, OrganAMNIST, and OrganSMNIST datasets
+
+## Abstract 
+Inverse problems, which involve estimating parameters from incomplete or noisy observations, arise in various fields such as medical imaging, geophysics, and signal processing. These problems are often ill-posed, requiring regularization techniques to stabilize the solution. In this work, we employ Flow Matching (FM), a generative framework that integrates a deterministic processes to map a simple reference distribution, such as a Gaussian, to the target distribution. Our method DAWN-FM: Data-AWare and Noise-Informed Flow Matching incorporates data and noise embedding, allowing the model to access representations about the measured data explicitly and also account for noise in the observations, making it particularly robust in scenarios where data is noisy or incomplete. By learning a time-dependent velocity field, FM not only provides accurate solutions but also enables uncertainty quantification by generating multiple plausible outcomes. Unlike pretrained diffusion models, which may struggle in highly ill-posed settings, our approach is trained specifically for each inverse problem and adapts to varying noise levels. We validate the effectiveness and robustness of our method through extensive numerical experiments on tasks such as image deblurring and tomography.
+
+<p align="center">
+  <img src="assets/dawnfm_inference.png" alt="DAWN-FM Inference Diagram" width="1000">
+</p>
+
+*Figure 1: Schematics for standard flow matching (FM) (left) and flow matching for solving inverse problem characterized by the forward problem A along with an additive noise scale σ (right). Here, $s_\theta$ represents the trained network for estimating the velocity along the trajectory $x_t$ at time $t$ between the reference distribution $\pi_0$ and the target distribution $\pi_1$, and $f$ represents a transformation on the measured (noisy) data which is used as data-embedding into the flow-matching network on the right*
 
 ## Key Features
 
@@ -180,11 +187,6 @@ python train_tomography.py \
 ```
 
 ### Inference
-
-![DAWN-FM Inference Diagram](assets/dawnfm_inference.png)
-
-*Figure 2: Inference pipeline for DAWN-FM showing the ODE solver trajectory from Gaussian noise to the reconstructed image.*
-
 #### Deblurring Task
 
 Run inference on test set:
@@ -457,19 +459,19 @@ Metrics are computed for:
 ## Architecture Details
 
 ### Training Process
-
-![DAWN-FM Training Diagram](assets/dawnfm_training.png)
-
-*Figure 1: Training pipeline for DAWN-FM showing the flow matching objective with data and noise embeddings.*
+<p align="center">
+  <img src="assets/dawnfm_training.png" alt="DAWN-FM Training Diagram" width="1000">
+</p>
+*Figure 2: Schematic of the training process for the FM model for solving inverse problem, where the forward model is given by $A$. This figure specifically represents the deblurring inverse problem. The network with parameters $\theta$ may or may not incorporate the noise embedding (see Section 4 of the paper for details). The two loss terms $L_1$ and $L_2$ represent the error in prediction of velocity and misfit, respectively. In this figure, the transformation $f$ for generating the data embedding was chosen as $f = A^\top$.*
 
 ### UNetFMG_DE (DAW-FM)
-- U-Net with Full Multi-Grid and data embedding
+- U-Net with data embedding
 - **Inputs**: current image, time, adjoint of measurement data
 - **Deblurring**: Adjoint is deconvolved/backprojected blurred image
 - **Tomography**: Adjoint is backprojected sinogram
 
 ### UNetFMG_DE_NE (DAWN-FM)
-- U-Net with Full Multi-Grid, data embedding, and noise embedding
+- U-Net with data and noise embedding
 - **Inputs**: current image, time, adjoint of measurement data, noise level
 - Same architecture as DAW-FM but with additional noise embedding layers
 - **Deblurring**: Noise level encoded per-image based on blur + additive noise
@@ -492,12 +494,12 @@ Metrics are computed for:
 ### Deblurring Tasks
 - **MNIST**: 28×28 grayscale handwritten digits
 - **CIFAR10**: 32×32 RGB natural images
-- **STL10**: 64×64 RGB natural images (higher resolution)
+- **STL10**: 64×64 RGB natural images
 
 ### Tomography Tasks
-- **OrganCMNIST**: 28×28 or 64×64 grayscale abdominal CT organ scans (coronal plane)
-- **OrganAMNIST**: 28×28 or 64×64 grayscale abdominal CT organ scans (axial plane)
-- **OrganSMNIST**: 28×28 or 64×64 grayscale abdominal CT organ scans (sagittal plane)
+- **OrganCMNIST**: 64×64 grayscale abdominal CT organ scans (coronal plane)
+- **OrganAMNIST**: 64×64 grayscale abdominal CT organ scans (axial plane)
+- **OrganSMNIST**: 64×64 grayscale abdominal CT organ scans (sagittal plane)
 
 All datasets are automatically downloaded on first use.
 
