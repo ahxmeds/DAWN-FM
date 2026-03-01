@@ -21,7 +21,7 @@ Inverse problems, which involve estimating parameters from incomplete or noisy o
   <img src="assets/dawnfm_inference.png" alt="DAWN-FM Inference Diagram" width="1000">
 </p>
 
-*Figure 1: Schematics for standard flow matching (FM) (left) and flow matching for solving inverse problem characterized by the forward problem A along with an additive noise scale σ (right). Here, $s_\theta$ represents the trained network for estimating the velocity along the trajectory $x_t$ at time $t$ between the reference distribution $\pi_0$ and the target distribution $\pi_1$, and $f$ represents a transformation on the measured (noisy) data which is used as data-embedding into the flow-matching network on the right*
+**Figure 1:** Schematics for standard flow matching (FM) (left) and flow matching for solving inverse problem characterized by the forward problem $\mathbf{A}$ along with an additive noise scale $\sigma$ (right). Here, $\mathbf{s}_\theta$ represents the trained network for estimating the velocity along the trajectory $\mathbf{x}_t$ at time $t$ between the reference distribution $\pi_0$ and the target distribution $\pi_1$ and $f$ represents a transformation on the measured (noisy) data which is used as data-embedding into the flow-matching network on the right.
 
 ## Key Features
 
@@ -460,9 +460,10 @@ Metrics are computed for:
 
 ### Training Process
 <p align="center">
-  <img src="assets/dawnfm_training.png" alt="DAWN-FM Training Diagram" width="1000">
+  <img src="assets/dawnfm_training.png" alt="DAWN-FM Training Diagram" width="800">
 </p>
-*Figure 2: Schematic of the training process for the FM model for solving inverse problem, where the forward model is given by $A$. This figure specifically represents the deblurring inverse problem. The network with parameters $\theta$ may or may not incorporate the noise embedding (see Section 4 of the paper for details). The two loss terms $L_1$ and $L_2$ represent the error in prediction of velocity and misfit, respectively. In this figure, the transformation $f$ for generating the data embedding was chosen as $f = A^\top$.*
+
+**Figure 2:** Schematic of the training process for the FM model for solving inverse problem, where the forward model is given by $\mathbf{A}$. This figure specifically represents the deblurring inverse problem. The network with parameters $\theta$ may or may not incorporate the noise embedding (see Section 4 of the paper for details). The two loss terms $\mathcal{L}_1$ and $\mathcal{L}_2$ represent the error in prediction of velocity and misfit, respectively. In this figure, the transformation $f$ for generating the data embedding was chosen as $f = \mathbf{A}^\top$.
 
 ### UNetFMG_DE (DAW-FM)
 - U-Net with data embedding
